@@ -4,7 +4,8 @@ import { ChatService, Message } from '../services/chat.service';
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { Auth } from '@angular/fire/auth';
-
+import { Router } from '@angular/router'; // 👈 Importar si aún no está
+import { signOut } from 'firebase/auth';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -17,7 +18,8 @@ export class HomePage implements OnInit {
 
   constructor(
     private chatService: ChatService,
-    private auth: Auth // ✅ inyectar el Auth de Firebase
+    private auth: Auth ,
+    private router: Router// ✅ inyectar el Auth de Firebase
   ) {}
 
   ngOnInit() {
@@ -38,7 +40,9 @@ export class HomePage implements OnInit {
       this.newMessage = '';
     }
   }
+  
+async logout() {
+  await signOut(this.auth);
+  this.router.navigateByUrl('/login', { replaceUrl: true });
 }
-
-
-
+}
